@@ -1,4 +1,4 @@
-# Simple Iterations classes C#
+# Simple Iterations classes CSharp
 ====================
 
 This is C# simple realisation of Seidel and Jacobi methods.  
@@ -8,7 +8,7 @@ There are two classes Seidel and Jacobi are innerhited from base abstract class 
 ## Usage
 
 
-...csharp
+```csharp
 // 1. Create a square two-dimensional matrix of coefficients.
 
 double[,] matrix = new double[3, 3] {
@@ -43,7 +43,7 @@ showMatrix(i.ResultMatrix);
 Console.WriteLine("\n Jakobi method:");
 showMatrix(j.ResultMatrix);
 
-...
+```
 
 ## License
 
