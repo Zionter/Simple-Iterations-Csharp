@@ -1,4 +1,5 @@
-Simple-Iterations-C-
+Simple Iterations classes C#
 ====================
 
-This is C# realisation of Seidel and Jacobi method.  
+This is C# simple realisation of Seidel and Jacobi method.  
+
