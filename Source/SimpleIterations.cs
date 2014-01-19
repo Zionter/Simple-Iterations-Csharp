@@ -123,9 +123,9 @@ namespace app
         {
             Console.WriteLine("\n Result:");
             for (int i = 0; i < x.Length; i++)
-			{
-			    Console.WriteLine(" {0} ", x[i]);
-			}
+            {
+                Console.WriteLine(" {0} ", x[i]);
+            }
         }
     }
 
@@ -156,7 +156,7 @@ namespace app
                 }
             }
         }
-        
+
         // Основная матрица и свободные члены.
         private double[,] matrix;
         private double[] addtional;
@@ -178,7 +178,7 @@ namespace app
                     accuracy = value;
             }
         }
-        
+
         // Конструктор. Получает значения при создании.
         public Jacobi(double[,] Matrix, double[] FreeElements, double Accuracy)
         {
@@ -198,79 +198,78 @@ namespace app
             // где x - делится на диагональый элемент первоначальной матрицы.
             // где b - эелементы из свободных членов
             // где а - элементы из матрицы
-            lock (this)
+
+            // матрица коеффициентов + столбец свободных членов.
+            double[,] a = new double[matrix.GetLength(0), matrix.GetLength(1) + 1];
+
+            for (int i = 0; i < a.GetLength(0); i++)
+                for (int j = 0; j < a.GetLength(1) - 1; j++)
+                    a[i, j] = matrix[i, j];
+
+            for (int i = 0; i < a.GetLength(0); i++)
+                a[i, a.GetLength(1) - 1] = addtional[i];
+
+            //---------------
+            // Метод Якоби.
+            //---------------
+
+            // Введем вектор значений неизвестных на предыдущей итерации,
+            // размер которого равен числу строк в матрице, т.е. size,
+            // причем согласно методу изначально заполняем его нулями
+
+            double[] previousValues = new double[a.GetLength(0)];
+            for (int i = 0; i < a.GetLength(0); i++)
             {
-                // матрица коеффициентов + столбец свободных членов.
-                double[,] a = new double[matrix.GetLength(0), matrix.GetLength(1) + 1];
+                previousValues[i] = 0.0;
+            }
 
-                for (int i = 0; i < a.GetLength(0); i++)
-                    for (int j = 0; j < a.GetLength(1) - 1; j++)
-                        a[i, j] = matrix[i, j];
+            // Будем выполнять итерационный процесс до тех пор,
+            // пока не будет достигнута необходимая точность
+            while (true)
+            {
+                // Введем вектор значений неизвестных на текущем шаге
+                double[] currentValues = new double[a.GetLength(0)];
 
-                for (int i = 0; i < a.GetLength(0); i++)
-                    a[i, a.GetLength(1) - 1] = addtional[i];
-
-                //---------------
-                // Метод Якоби.
-                //---------------
-
-                // Введем вектор значений неизвестных на предыдущей итерации,
-                // размер которого равен числу строк в матрице, т.е. size,
-                // причем согласно методу изначально заполняем его нулями
-
-                double[] previousValues = new double[a.GetLength(0)];
+                // Посчитаем значения неизвестных на текущей итерации
+                // в соответствии с теоретическими формулами
                 for (int i = 0; i < a.GetLength(0); i++)
                 {
-                    previousValues[i] = 0.0;
-                }
+                    // Инициализируем i-ую неизвестную значением
+                    // свободного члена i-ой строки матрицы
+                    currentValues[i] = a[i, a.GetLength(0)];
 
-                // Будем выполнять итерационный процесс до тех пор,
-                // пока не будет достигнута необходимая точность
-                while (true)
-                {
-                    // Введем вектор значений неизвестных на текущем шаге
-                    double[] currentValues = new double[a.GetLength(0)];
-
-                    // Посчитаем значения неизвестных на текущей итерации
-                    // в соответствии с теоретическими формулами
-                    for (int i = 0; i < a.GetLength(0); i++)
+                    // Вычитаем сумму по всем отличным от i-ой неизвестным
+                    for (int j = 0; j < a.GetLength(0); j++)
                     {
-                        // Инициализируем i-ую неизвестную значением
-                        // свободного члена i-ой строки матрицы
-                        currentValues[i] = a[i, a.GetLength(0)];
-
-                        // Вычитаем сумму по всем отличным от i-ой неизвестным
-                        for (int j = 0; j < a.GetLength(0); j++)
+                        if (i != j)
                         {
-                            if (i != j)
-                            {
-                                currentValues[i] -= a[i, j] * previousValues[j];
-                            }
+                            currentValues[i] -= a[i, j] * previousValues[j];
                         }
-
-                        // Делим на коэффициент при i-ой неизвестной
-                        currentValues[i] /= a[i, i];
                     }
 
-                    // Посчитаем текущую погрешность относительно предыдущей итерации
-                    double differency = 0.0;
-
-                    for (int i = 0; i < a.GetLength(0); i++)
-                        differency += Math.Abs(currentValues[i] - previousValues[i]);
-
-                    // Если необходимая точность достигнута, то завершаем процесс
-                    if (differency < accuracy)
-                        break;
-
-                    // Переходим к следующей итерации, так
-                    // что текущие значения неизвестных
-                    // становятся значениями на предыдущей итерации
-                    previousValues = currentValues;
+                    // Делим на коэффициент при i-ой неизвестной
+                    currentValues[i] /= a[i, i];
                 }
 
-                resultMatrix = previousValues;
+                // Посчитаем текущую погрешность относительно предыдущей итерации
+                double differency = 0.0;
+
+                for (int i = 0; i < a.GetLength(0); i++)
+                    differency += Math.Abs(currentValues[i] - previousValues[i]);
+
+                // Если необходимая точность достигнута, то завершаем процесс
+                if (differency < accuracy)
+                    break;
+
+                // Переходим к следующей итерации, так
+                // что текущие значения неизвестных
+                // становятся значениями на предыдущей итерации
+                previousValues = currentValues;
             }
+
+            resultMatrix = previousValues;
         }
+
     }
 
     /// <summary>
@@ -329,7 +328,7 @@ namespace app
         // Сам метод рассчета.
         public override void calculateMatrix()
         {
-            
+
             // общий вид:
             // [x1]   [ b1/a11 ]   / 0 x x \ 
             // [x2] = [ b2/a22 ] - | x 0 x |
@@ -337,90 +336,88 @@ namespace app
             // где x - делится на диагональый элемент первоначальной матрицы.
             // где b - эелементы из свободных членов
             // где а - элементы из матрицы
-            lock (this)
+
+            // матрица коеффициентов + столбец свободных членов.
+            double[,] a = new double[matrix.GetLength(0), matrix.GetLength(1) + 1];
+
+            for (int i = 0; i < a.GetLength(0); i++)
+                for (int j = 0; j < a.GetLength(1) - 1; j++)
+                    a[i, j] = matrix[i, j];
+
+            for (int i = 0; i < a.GetLength(0); i++)
+                a[i, a.GetLength(1) - 1] = addtional[i];
+
+            //---------------
+            // Метод Зейделя.
+            //---------------
+
+            // Введем вектор значений неизвестных на предыдущей итерации,
+            // размер которого равен числу строк в матрице, т.е. size,
+            // причем согласно методу изначально заполняем его нулями
+            double[] previousValues = new double[matrix.GetLength(0)];
+            for (int i = 0; i < previousValues.GetLength(0); i++)
             {
-
-                // матрица коеффициентов + столбец свободных членов.
-                double[,] a = new double[matrix.GetLength(0), matrix.GetLength(1) + 1];
-
-                for (int i = 0; i < a.GetLength(0); i++)
-                    for (int j = 0; j < a.GetLength(1) - 1; j++)
-                        a[i, j] = matrix[i, j];
-
-                for (int i = 0; i < a.GetLength(0); i++)
-                    a[i, a.GetLength(1) - 1] = addtional[i];
-
-                //---------------
-                // Метод Зейделя.
-                //---------------
-
-                // Введем вектор значений неизвестных на предыдущей итерации,
-                // размер которого равен числу строк в матрице, т.е. size,
-                // причем согласно методу изначально заполняем его нулями
-                double[] previousValues = new double[matrix.GetLength(0)];
-                for (int i = 0; i < previousValues.GetLength(0); i++)
-                {
-                    previousValues[i] = 0.0;
-                }
-
-                // Будем выполнять итерационный процесс до тех пор,
-                // пока не будет достигнута необходимая точность
-                while (true)
-                {
-                    // Введем вектор значений неизвестных на текущем шаге
-                    double[] currentValues = new double[a.GetLength(0)];
-
-                    // Посчитаем значения неизвестных на текущей итерации
-                    // в соответствии с теоретическими формулами
-                    for (int i = 0; i < matrix.GetLength(0); i++)
-                    {
-                        // Инициализируем i-ую неизвестную значением
-                        // свободного члена i-ой строки матрицы
-                        currentValues[i] = a[i, a.GetLength(0)];
-
-                        // Вычитаем сумму по всем отличным от i-ой неизвестным
-                        for (int j = 0; j < a.GetLength(0); j++)
-                        {
-                            // При j < i можем использовать уже посчитанные
-                            // на этой итерации значения неизвестных
-                            if (j < i)
-                            {
-                                currentValues[i] -= a[i, j] * currentValues[j];
-                            }
-
-                            // При j > i используем значения с прошлой итерации
-                            if (j > i)
-                            {
-                                currentValues[i] -= a[i, j] * previousValues[j];
-                            }
-                        }
-
-                        // Делим на коэффициент при i-ой неизвестной
-                        currentValues[i] /= a[i, i];
-                    }
-
-                    // Посчитаем текущую погрешность относительно предыдущей итерации
-                    double differency = 0.0;
-
-                    for (int i = 0; i < a.GetLength(0); i++)
-                        differency += Math.Abs(currentValues[i] - previousValues[i]);
-
-                    // Если необходимая точность достигнута, то завершаем процесс
-                    if (differency < accuracy)
-                        break;
-
-                    // Переходим к следующей итерации, так
-                    // что текущие значения неизвестных
-                    // становятся значениями на предыдущей итерации
-
-                    previousValues = currentValues;
-                }
-
-                // результат присваиваем матрице результатов.
-                resultMatrix = previousValues;
+                previousValues[i] = 0.0;
             }
 
+            // Будем выполнять итерационный процесс до тех пор,
+            // пока не будет достигнута необходимая точность
+            while (true)
+            {
+                // Введем вектор значений неизвестных на текущем шаге
+                double[] currentValues = new double[a.GetLength(0)];
+
+                // Посчитаем значения неизвестных на текущей итерации
+                // в соответствии с теоретическими формулами
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                    // Инициализируем i-ую неизвестную значением
+                    // свободного члена i-ой строки матрицы
+                    currentValues[i] = a[i, a.GetLength(0)];
+
+                    // Вычитаем сумму по всем отличным от i-ой неизвестным
+                    for (int j = 0; j < a.GetLength(0); j++)
+                    {
+                        // При j < i можем использовать уже посчитанные
+                        // на этой итерации значения неизвестных
+                        if (j < i)
+                        {
+                            currentValues[i] -= a[i, j] * currentValues[j];
+                        }
+
+                        // При j > i используем значения с прошлой итерации
+                        if (j > i)
+                        {
+                            currentValues[i] -= a[i, j] * previousValues[j];
+                        }
+                    }
+
+                    // Делим на коэффициент при i-ой неизвестной
+                    currentValues[i] /= a[i, i];
+                }
+
+                // Посчитаем текущую погрешность относительно предыдущей итерации
+                double differency = 0.0;
+
+                for (int i = 0; i < a.GetLength(0); i++)
+                    differency += Math.Abs(currentValues[i] - previousValues[i]);
+
+                // Если необходимая точность достигнута, то завершаем процесс
+                if (differency < accuracy)
+                    break;
+
+                // Переходим к следующей итерации, так
+                // что текущие значения неизвестных
+                // становятся значениями на предыдущей итерации
+
+                previousValues = currentValues;
+            }
+
+            // результат присваиваем матрице результатов.
+            resultMatrix = previousValues;
         }
+
+
 
     }
 }
