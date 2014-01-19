@@ -1,5 +1,5 @@
 # Simple Iterations classes CSharp
-====================
+
 
 This is C# simple realisation of Seidel and Jacobi methods.  
 
