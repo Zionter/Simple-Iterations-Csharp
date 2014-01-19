@@ -1,0 +1,12 @@
+c:\users\ruslan_pc\documents\visual studio 2012\Projects\ConsoleApplication7\ConsoleApplication7\bin\Debug\ConsoleApplication7.exe.config
+c:\users\ruslan_pc\documents\visual studio 2012\Projects\ConsoleApplication7\ConsoleApplication7\bin\Debug\ConsoleApplication7.exe
+c:\users\ruslan_pc\documents\visual studio 2012\Projects\ConsoleApplication7\ConsoleApplication7\bin\Debug\ConsoleApplication7.pdb
+c:\users\ruslan_pc\documents\visual studio 2012\Projects\ConsoleApplication7\ConsoleApplication7\obj\Debug\ConsoleApplication7.csprojResolveAssemblyReference.cache
+c:\users\ruslan_pc\documents\visual studio 2012\Projects\ConsoleApplication7\ConsoleApplication7\obj\Debug\ConsoleApplication7.exe
+c:\users\ruslan_pc\documents\visual studio 2012\Projects\ConsoleApplication7\ConsoleApplication7\obj\Debug\ConsoleApplication7.pdb
+C:\Users\Ruslan_pc\Documents\Visual Studio 2012\Projects\zeydel\ConsoleApplication7\bin\Debug\ConsoleApplication7.exe.config
+C:\Users\Ruslan_pc\Documents\Visual Studio 2012\Projects\zeydel\ConsoleApplication7\obj\Debug\ConsoleApplication7.exe
+C:\Users\Ruslan_pc\Documents\Visual Studio 2012\Projects\zeydel\ConsoleApplication7\obj\Debug\ConsoleApplication7.pdb
+C:\Users\Ruslan_pc\Documents\Visual Studio 2012\Projects\zeydel\ConsoleApplication7\obj\Debug\ConsoleApplication7.csprojResolveAssemblyReference.cache
+C:\Users\Ruslan_pc\Documents\Visual Studio 2012\Projects\zeydel\ConsoleApplication7\bin\Debug\ConsoleApplication7.exe
+C:\Users\Ruslan_pc\Documents\Visual Studio 2012\Projects\zeydel\ConsoleApplication7\bin\Debug\ConsoleApplication7.pdb
