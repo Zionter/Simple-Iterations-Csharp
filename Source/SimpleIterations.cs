@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 
 //-------------------------------------------
@@ -7,6 +7,7 @@ using System.Threading;
 // Grinchenko University. Informatics, 2-nd course.
 // Kudinov Ruslan 
 // (c) 2014
+// License - MIT license. 
 //-------------------------------------------
 
 namespace app
