@@ -40,7 +40,7 @@ j.calculateMatrix();
 
 Console.WriteLine("\n Seidel method:");
 showMatrix(i.ResultMatrix);
-Console.WriteLine("\n Jakobi method:");
+Console.WriteLine("\n Jacobi method:");
 showMatrix(j.ResultMatrix);
 
 ```
